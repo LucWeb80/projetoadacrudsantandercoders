@@ -230,7 +230,7 @@ Escolha uma das opções abaixo:
 
 ------------------
 
-SOLUÇÃO DO PROJETO
+## SOLUÇÃO DO PROJETO
 
 ## 1. Implementação da função run
 ## A função run deve exibir a tela inicial e gerenciar a navegação entre as opções. Vamos criar um loop que continua executando até que o usuário decida sair do programa.

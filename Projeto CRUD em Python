@@ -1,1 +1,408 @@
 ### Projeto CRUD SantanterCoders
+
+# projeto_transacoes_bancarias -- DS-PY-17 - logica de programacao II
+# readme link here: 
+# https://github.com/allansuzuki/ADA_classes/blob/main/DS-PY-Data-Science/DS-PY-017%20L%C3%93GICA%20DE%20PROGRAMA%C3%87%C3%83O%20II%20(PY)/Material%20do%20Aluno/projeto_README.md
+# 
+# Esse programa é um sistema de gestao de transacoes de uma conta bancária pessoal
+# no qual os dados são de transações e possuem seu valor, a categoria do gasto e seu ID.
+# 
+# Teu objetivo é completar esse sistema CRUD (Create-Read-Update-Delete) simples 
+# para ver dados de transacao da tua conta pessoal, criar, editar e excluir transações.
+# Também deve fazer com que o programa NUNCA pare, ou seja,
+# caso ocorra um possível erro, deve validar as entradas, detectar erros e avisar o usuário
+# mas o programa não deve parar.
+#
+#
+# Notas importantes: 
+# 1. As funções que geram os dados e criam a interface do sistema já estão prontas. 
+# por favor não as altere.
+#
+# 2. Depois das funções do sistema estão as funções do programa
+# No qual podem alterar à vontade, exceto o nome das funções
+# Ou seja, podem criar funções, adicionar ou remover parâmetros, 
+# mas não alterar o nome das funções existentes.
+#
+# 3. Coloque opções de navegabilidade em cada janela que o usuário estiver.
+# Por exemplo, se ele escolher a opcao "alterar transacao" sem querer, tem que ter a opcao de voltar para a tela anterior ou inicial.
+#
+# 4. Caso por qualquer motivo queira os dados originais novamente,
+# apage o json `transactions` na pasta `data` e inicie o programa novamente para gerar os dados.
+# Os valores serão os mesmos, porém os UUID NÃO serão os mesmos!!
+#
+# Critérios (pontos):
+#   tarefas validacoes  total
+# C     10      15       25
+# R     25      25       50
+# U     10      10       20
+# D     2.5     2.5      5
+#
+#
+# Boa sorte e divirtam-se :)
+# ------------------------------------------------------------------------------
+# -----------------------
+# depencies
+# -----------------------
+import json
+import os
+import uuid
+import random
+import sys
+
+# -----------------------
+# load settings
+# -----------------------
+sys.path.append('./data/')
+from data import settings
+
+# -----------------------
+# SYSTEM functions 
+# -----------------------
+# não alterar nada das funções de system
+def criar_transacoes(num_transacoes, proporcao_categorias, seed=settings.seed):
+    assert sum([proporcao_categorias[k] for k in proporcao_categorias])==1, '`proporcao_categorias` não soma 100%! Favor rever.'
+
+    # garantir reprodutibilidade dos valores
+    random.seed(seed)
+
+    # Calcula o número de transações por categoria com base na proporção
+    numero_transacoes_por_categoria = {categoria: int(num_transacoes * proporcao) for categoria, proporcao in proporcao_categorias.items()}
+    
+    transacoes = []
+    
+    # Gera as transações
+    for categoria, quantidade in numero_transacoes_por_categoria.items():
+        for _ in range(quantidade):
+            transacao = {
+                "UUID": str(uuid.uuid4()),
+                "valor": round(random.uniform(1.0, 1000.0), 2),  # Preço aleatório entre 1 e 1000
+                "categoria": categoria
+            }
+            transacoes.append(transacao)
+    
+    return transacoes
+
+def salvar_json(transacoes, path2save, filename):
+    # create path if not exist
+    if not os.path.exists(path2save):
+        os.makedirs(path2save)
+    with open(os.path.join(path2save,filename), "w") as file:
+        json.dump(transacoes, file, indent=4)
+    print(f"Arquivo salvo em: {os.path.abspath(os.path.curdir)+'/'+path2save+'/'+filename}")
+
+def criar_bd(num_transacoes:int = 10000, proporcao_categorias:list = settings.categorias_proporcao, path2save="./data", filename='transactions.json'):
+    salvar_json(criar_transacoes(num_transacoes,  proporcao_categorias),
+                path2save, filename
+    )
+
+def load_bd(filepath='./data/transactions.json'):
+    with open(filepath, "r") as file:
+        bd = json.load(file)
+    return bd
+
+def tela_inicial():
+    print("Bem-vindo <teu nome inteiro aqui>!")
+    print('conta: 0000001-0')
+    print("\nEste programa permite gerenciar transações de sua conta pessoal.")
+    print("\nEscolha uma das opções abaixo:")
+    print("1. Visualizar relatórios")
+    print("2. Cadastrar transações")
+    print("3. Editar transações")
+    print("4. Excluir transações")
+    print("-" * 10)
+    print("0. Sair")
+    print('\n')
+
+# -----------------------
+# PROGRAM functions 
+# -----------------------
+# pode editar como quiser as funções abaixo! Somente não altere os nomes das funções.
+# para alterar as funções abaixo, basta apagar o `pass` e preencher com as instruções.
+
+def run():
+    """
+    Esta é a função principal que vai rodar o programa
+    """  
+    # exibe a tela inicial
+    tela_inicial()
+
+def visualizar_relatorios():
+    """
+    Mostra um menu de opcoes no qual gera relatórios com base na escolha do usuário.
+    """
+    pass
+
+def salvar_relatorio():
+    """
+    Salvar o relatório gerado em .txt
+    \nAplicar esta função em todos os relatórios listados em `visualizar_relatorios`
+    """
+
+def calcular_total_transacoes():
+    """
+    Calcula o valor total de transações da conta.
+    Utilize essa mesma função para o caso `por categoria`
+    """
+    pass
+
+def mostrar_m5_transacoes():
+    """
+    Mostra as m5 transações realizadas, sendo m parâmetro que deve ser adicionada à função.
+    \nm : 'max','min','median', sendo 
+    \n\t'max' mostra os top 5 maior valor,
+    \n\t'min' mostra os top 5 menor valor,
+    \n\t'mean' mostra os top 5 valores próximos a média
+    
+    Utilize essa mesma função para o caso `por categoria`
+    """
+    pass
+
+def calcular_media():
+    """
+    Calcula a média dos valores das transações.
+    Utilize essa mesma função para o caso `por categoria`
+    """
+    pass
+
+def consultar_transacao_por_ID():
+    """
+    Consulta uma transação específica pelo seu UUID.
+    """
+    pass
+
+def cadastrar_transacao():
+    """
+    Cadastra uma nova transação.
+    \nObs:Para gerar um novo uuid, veja como é feito na função `criar_transacoes`.
+    """
+
+def editar_transacao_por_ID():
+    """
+    Edita uma transação específica pelo seu UUID.
+    """
+    pass
+
+def excluir_transacao():
+    """
+    Exclui uma transação específica pelo UUID.
+    """
+    pass
+
+# -----------------------
+# MAIN SCRIPT
+# -----------------------
+# não alterar nada abaixo
+if __name__ == "__main__":
+    
+    # -----------------------
+    # NÃO ALTERAR ESTE BLOCO
+    # -----------------------
+    # criar o banco de dados caso ele não exista
+    print(os.path.abspath('.'))
+    if not os.path.exists('./data/transactions.json'):
+        criar_bd()
+    
+    # load bd 
+    bd = load_bd()
+    # -----------------------
+
+    # -----------------------
+    # ABAIXO PODE ALTERAR
+    # -----------------------
+    #limpar console (opcional)
+    os.system('cls' if os.name == 'nt' else 'clear')
+    # inicia o programa
+    run()
+
+C:\Users\Inspira\Desktop\Logica de Programação II\Santander Coders 2024 - Ciencia de dados 1176\Projeto
+Bem-vindo <teu nome inteiro aqui>!
+conta: 0000001-0
+
+Este programa permite gerenciar transações de sua conta pessoal.
+
+Escolha uma das opções abaixo:
+1. Visualizar relatórios
+2. Cadastrar transações
+3. Editar transações
+4. Excluir transações
+----------
+0. Sair
+
+------------------
+
+SOLUÇÃO DO PROJETO
+
+## 1. Implementação da função run
+## A função run deve exibir a tela inicial e gerenciar a navegação entre as opções. Vamos criar um loop que continua executando até que o usuário decida sair do programa.
+
+def run():
+    """
+    Esta é a função principal que vai rodar o programa
+    """  
+    while True:
+        tela_inicial()
+        opcao = input("Escolha uma opção: ")
+        
+        if opcao == "1":
+            visualizar_relatorios()
+        elif opcao == "2":
+            cadastrar_transacao()
+        elif opcao == "3":
+            editar_transacao_por_ID()
+        elif opcao == "4":
+            excluir_transacao()
+        elif opcao == "0":
+            print("Saindo do programa. Até logo!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+## 2. Implementação das funções para visualizar relatórios
+## Vamos começar a preencher as funções que exibem relatórios, como visualizar_relatorios, calcular_total_transacoes, mostrar_m5_transacoes, calcular_media, e consultar_transacao_por_ID.
+
+## visualizar_relatorios
+## Esta função irá mostrar um submenu com opções para o usuário escolher que tipo de relatório deseja ver.
+
+def visualizar_relatorios():
+    """
+    Mostra um menu de opções no qual gera relatórios com base na escolha do usuário.
+    """
+    while True:
+        print("\nMenu de Relatórios:")
+        print("1. Calcular total das transações")
+        print("2. Mostrar as 5 maiores/menores/média transações")
+        print("3. Calcular a média das transações")
+        print("4. Consultar transação por ID")
+        print("0. Voltar à tela inicial")
+        opcao = input("Escolha uma opção: ")
+        
+        if opcao == "1":
+            calcular_total_transacoes()
+        elif opcao == "2":
+            m = input("Escolha entre 'max', 'min' ou 'mean': ")
+            mostrar_m5_transacoes(m)
+        elif opcao == "3":
+            calcular_media()
+        elif opcao == "4":
+            consultar_transacao_por_ID()
+        elif opcao == "0":
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+## calcular_total_transacoes
+## Essa função calcula o valor total de todas as transações.
+
+def calcular_total_transacoes():
+    """
+    Calcula o valor total de transações da conta.
+    """
+    total = sum(transacao['valor'] for transacao in bd)
+    print(f"O valor total das transações é: R${total:.2f}")
+
+## mostrar_m5_transacoes
+## Essa função deve mostrar as 5 maiores, menores ou medianas transações, dependendo do parâmetro m.
+
+def mostrar_m5_transacoes(m):
+    """
+    Mostra as m5 transações realizadas, sendo m parâmetro que deve ser adicionada à função.
+    """
+    if m not in ['max', 'min', 'mean']:
+        print("Opção inválida.")
+        return
+    
+    if m == 'max':
+        transacoes_ordenadas = sorted(bd, key=lambda x: x['valor'], reverse=True)[:5]
+    elif m == 'min':
+        transacoes_ordenadas = sorted(bd, key=lambda x: x['valor'])[:5]
+    elif m == 'mean':
+        media = sum(transacao['valor'] for transacao in bd) / len(bd)
+        transacoes_ordenadas = sorted(bd, key=lambda x: abs(x['valor'] - media))[:5]
+    
+    for transacao in transacoes_ordenadas:
+        print(transacao)
+
+## calcular_media
+## Essa função calcula a média dos valores das transações.
+
+def calcular_media():
+    """
+    Calcula a média dos valores das transações.
+    """
+    media = sum(transacao['valor'] for transacao in bd) / len(bd)
+    print(f"A média das transações é: R${media:.2f}")
+
+## consultar_transacao_por_ID
+## Essa função consulta uma transação específica pelo seu UUID.
+
+def consultar_transacao_por_ID():
+    """
+    Consulta uma transação específica pelo seu UUID.
+    """
+    id_consulta = input("Digite o UUID da transação: ")
+    transacao = next((t for t in bd if t['UUID'] == id_consulta), None)
+    
+    if transacao:
+        print(transacao)
+    else:
+        print("Transação não encontrada.")
+
+## 3. Implementação das funções de manipulação de dados
+## Agora, vamos criar as funções para cadastrar, editar e excluir transações.
+
+## cadastrar_transacao
+## Essa função permite ao usuário cadastrar uma nova transação.
+
+def cadastrar_transacao():
+    """
+    Cadastra uma nova transação.
+    """
+    valor = float(input("Digite o valor da transação: R$"))
+    categoria = input("Digite a categoria da transação: ")
+    nova_transacao = {
+        "UUID": str(uuid.uuid4()),
+        "valor": round(valor, 2),
+        "categoria": categoria
+    }
+    bd.append(nova_transacao)
+    salvar_json(bd, "./data", "transactions.json")
+    print("Transação cadastrada com sucesso.")
+
+## editar_transacao_por_ID
+## Essa função permite ao usuário editar uma transação existente pelo seu UUID.
+
+def editar_transacao_por_ID():
+    """
+    Edita uma transação específica pelo seu UUID.
+    """
+    id_editar = input("Digite o UUID da transação a ser editada: ")
+    transacao = next((t for t in bd if t['UUID'] == id_editar), None)
+    
+    if transacao:
+        novo_valor = float(input(f"Digite o novo valor (atual: R${transacao['valor']}): R$"))
+        nova_categoria = input(f"Digite a nova categoria (atual: {transacao['categoria']}): ")
+        
+        transacao['valor'] = round(novo_valor, 2)
+        transacao['categoria'] = nova_categoria
+        
+        salvar_json(bd, "./data", "transactions.json")
+        print("Transação editada com sucesso.")
+    else:
+        print("Transação não encontrada.")
+
+## excluir_transacao
+## Essa função permite ao usuário excluir uma transação pelo seu UUID.
+
+def excluir_transacao():
+    """
+    Exclui uma transação específica pelo UUID.
+    """
+    id_excluir = input("Digite o UUID da transação a ser excluída: ")
+    transacao = next((t for t in bd if t['UUID'] == id_excluir), None)
+    
+    if transacao:
+        bd.remove(transacao)
+        salvar_json(bd, "./data", "transactions.json")
+        print("Transação excluída com sucesso.")
+    else:
+        print("Transação não encontrada.")

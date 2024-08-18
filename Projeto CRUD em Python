@@ -214,26 +214,9 @@ if __name__ == "__main__":
     # inicia o programa
     run()
 
-C:\Users\Inspira\Desktop\Logica de Programação II\Santander Coders 2024 - Ciencia de dados 1176\Projeto
-Bem-vindo <teu nome inteiro aqui>!
-conta: 0000001-0
-
-Este programa permite gerenciar transações de sua conta pessoal.
-
-Escolha uma das opções abaixo:
-1. Visualizar relatórios
-2. Cadastrar transações
-3. Editar transações
-4. Excluir transações
-----------
-0. Sair
-
-------------------
-
 ## SOLUÇÃO DO PROJETO
-
-## 1. Implementação da função run
-## A função run deve exibir a tela inicial e gerenciar a navegação entre as opções. Vamos criar um loop que continua executando até que o usuário decida sair do programa.
+## [Luciano Weber, Arthur Dalcin, Arthur Gomes, Davi Ribeiro, Thais Fernandes]
+## Todas as linhas abaixo foram escritas pelos quatro autores, em reunião online em 18 de agosto de 2024.
 
 def run():
     """
@@ -257,12 +240,6 @@ def run():
         else:
             print("Opção inválida. Tente novamente.")
 
-## 2. Implementação das funções para visualizar relatórios
-## Vamos começar a preencher as funções que exibem relatórios, como visualizar_relatorios, calcular_total_transacoes, mostrar_m5_transacoes, calcular_media, e consultar_transacao_por_ID.
-
-## visualizar_relatorios
-## Esta função irá mostrar um submenu com opções para o usuário escolher que tipo de relatório deseja ver.
-
 def visualizar_relatorios():
     """
     Mostra um menu de opções no qual gera relatórios com base na escolha do usuário.
@@ -279,9 +256,11 @@ def visualizar_relatorios():
         if opcao == "1":
             calcular_total_transacoes()
         elif opcao == "2":
-            m = input("Escolha entre 'max', 'min' ou 'mean': ")
+            m = input("Escolha entre 'max', 'min' ou 'média': ")
             mostrar_m5_transacoes(m)
         elif opcao == "3":
+            if len (bd) == 0:
+                print ("Não há transações cadastradas")
             calcular_media()
         elif opcao == "4":
             consultar_transacao_por_ID()
@@ -290,9 +269,6 @@ def visualizar_relatorios():
         else:
             print("Opção inválida. Tente novamente.")
 
-## calcular_total_transacoes
-## Essa função calcula o valor total de todas as transações.
-
 def calcular_total_transacoes():
     """
     Calcula o valor total de transações da conta.
@@ -300,14 +276,11 @@ def calcular_total_transacoes():
     total = sum(transacao['valor'] for transacao in bd)
     print(f"O valor total das transações é: R${total:.2f}")
 
-## mostrar_m5_transacoes
-## Essa função deve mostrar as 5 maiores, menores ou medianas transações, dependendo do parâmetro m.
-
 def mostrar_m5_transacoes(m):
     """
     Mostra as m5 transações realizadas, sendo m parâmetro que deve ser adicionada à função.
     """
-    if m not in ['max', 'min', 'mean']:
+    if m not in ['max', 'min', 'média', 'media']:
         print("Opção inválida.")
         return
     
@@ -315,15 +288,12 @@ def mostrar_m5_transacoes(m):
         transacoes_ordenadas = sorted(bd, key=lambda x: x['valor'], reverse=True)[:5]
     elif m == 'min':
         transacoes_ordenadas = sorted(bd, key=lambda x: x['valor'])[:5]
-    elif m == 'mean':
+    elif m == 'média' or m == 'media':
         media = sum(transacao['valor'] for transacao in bd) / len(bd)
         transacoes_ordenadas = sorted(bd, key=lambda x: abs(x['valor'] - media))[:5]
     
     for transacao in transacoes_ordenadas:
         print(transacao)
-
-## calcular_media
-## Essa função calcula a média dos valores das transações.
 
 def calcular_media():
     """
@@ -332,33 +302,26 @@ def calcular_media():
     media = sum(transacao['valor'] for transacao in bd) / len(bd)
     print(f"A média das transações é: R${media:.2f}")
 
-## consultar_transacao_por_ID
-## Essa função consulta uma transação específica pelo seu UUID.
-
-def consultar_transacao_por_ID():
-    """
-    Consulta uma transação específica pelo seu UUID.
-    """
-    id_consulta = input("Digite o UUID da transação: ")
-    transacao = next((t for t in bd if t['UUID'] == id_consulta), None)
-    
-    if transacao:
-        print(transacao)
-    else:
-        print("Transação não encontrada.")
-
-## 3. Implementação das funções de manipulação de dados
-## Agora, vamos criar as funções para cadastrar, editar e excluir transações.
-
-## cadastrar_transacao
-## Essa função permite ao usuário cadastrar uma nova transação.
+def consultar_transacao_por_ID(id):
+    try:
+        for transacao in bd:
+            if transacao['UUID'] == id:
+                return transacao
+        print("Transação não encontrada")
+        return None
+    except Exception as e:
+        print(f"Erro ao consultar transação: {e}")
+        return None
 
 def cadastrar_transacao():
     """
     Cadastra uma nova transação.
     """
-    valor = float(input("Digite o valor da transação: R$"))
-    categoria = input("Digite a categoria da transação: ")
+    try:
+        valor = float(input("Digite o valor da transação: "))
+        categoria = input("Digite a categoria da transação: ")
+    except ValueError:
+        print("\nValor inválido. Tente novamente.")
     nova_transacao = {
         "UUID": str(uuid.uuid4()),
         "valor": round(valor, 2),
@@ -367,9 +330,6 @@ def cadastrar_transacao():
     bd.append(nova_transacao)
     salvar_json(bd, "./data", "transactions.json")
     print("Transação cadastrada com sucesso.")
-
-## editar_transacao_por_ID
-## Essa função permite ao usuário editar uma transação existente pelo seu UUID.
 
 def editar_transacao_por_ID():
     """
@@ -389,9 +349,6 @@ def editar_transacao_por_ID():
         print("Transação editada com sucesso.")
     else:
         print("Transação não encontrada.")
-
-## excluir_transacao
-## Essa função permite ao usuário excluir uma transação pelo seu UUID.
 
 def excluir_transacao():
     """

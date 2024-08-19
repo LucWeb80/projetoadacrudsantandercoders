@@ -70,7 +70,6 @@ def tela_inicial():
     print("0. Sair")
     print('\n')
 
-# Funções criadas para evitar repetição no código e melhorar legibilidade e compreensão
 def limpar_console():
     os.system('cls')
 
@@ -80,7 +79,6 @@ def aguarda_usuario():
 # -----------------------
 # PROGRAM functions 
 # -----------------------
-## Todas as linhas abaixo foram escritas pelos quatro autores, em reunião online em 18 de agosto de 2024.
 def run():
     """
     Esta é a função principal que vai rodar o programa

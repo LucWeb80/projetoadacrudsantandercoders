@@ -70,6 +70,7 @@ def tela_inicial():
     print("0. Sair")
     print('\n')
 
+# Funções criadas para evitar repetição no código e melhorar legibilidade e compreensão
 def limpar_console():
     os.system('cls')
 

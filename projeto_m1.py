@@ -73,6 +73,9 @@ def tela_inicial():
 def limpar_console():
     os.system('cls')
 
+def aguarda_usuario():
+    input("\nPressione qualquer tecla para continuar...")
+
 # -----------------------
 # PROGRAM functions 
 # -----------------------
@@ -86,23 +89,34 @@ def run():
         opcao = input("Digite uma opção: ")
         
         if opcao == "1":
-            if len (bd) == 0:
+            if len(bd) == 0:
                 limpar_console()
                 print ("Não há transações cadastradas.")
-                input("\nPressione qualquer tecla para continuar...")
+                aguarda_usuario()
                 continue
             visualizar_relatorios()
         elif opcao == "2":
             cadastrar_transacao()
         elif opcao == "3":
+            if len (bd) == 0:
+                limpar_console()
+                print ("Não há transações cadastradas.")
+                aguarda_usuario()
+                continue
             editar_transacao_por_ID()
         elif opcao == "4":
+            if len (bd) == 0:
+                limpar_console()
+                print ("Não há transações cadastradas.")
+                aguarda_usuario()
+                continue
             excluir_transacao()
         elif opcao == "0":
             print("\nSaindo do programa. Até logo!")
             break
         else:
             print("Opção inválida. Tente novamente.")
+            aguarda_usuario()
 
 def visualizar_relatorios():
     """
@@ -159,12 +173,12 @@ def calcular_total_transacoes():
     if save_report.lower() == 's':
         salvar_relatorio(total)
         print(f"Relatório salvo com sucesso.")
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
     elif save_report.lower() == 'n':
         pass
     else:
         print("Opção inválida. Tente novamente.")
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
 
 def mostrar_m5_transacoes(m):
     """
@@ -188,12 +202,12 @@ def mostrar_m5_transacoes(m):
     if save_report.lower() == 's':
         salvar_relatorio(transacoes_ordenadas)
         print(f"Relatório salvo com sucesso.")
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
     elif save_report.lower() == 'n':
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
     else:
         print("Opção inválida. Tente novamente.")
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
 
 
 def calcular_media():
@@ -208,13 +222,11 @@ def calcular_media():
     if save_report.lower() == 's':
         salvar_relatorio(media)
         print(f"Relatório salvo com sucesso.")
-        input("\nPressione qualquer tecla para continuar...")
     elif save_report.lower() == 'n':
-        input("\nPressione qualquer tecla para continuar...")
+        pass
     else:
         print("Opção inválida. Tente novamente.")
-        input("\nPressione qualquer tecla para continuar...")
-    input("\nPressione qualquer tecla para continuar...")
+    aguarda_usuario()
 
 def consultar_transacao_por_ID():
     limpar_console()
@@ -224,11 +236,11 @@ def consultar_transacao_por_ID():
         if transacao['UUID'] == id:
             print(f"Transação encontrada!")
             print(f"{transacao['categoria']} - R$ {transacao['valor']:.2f}")
-            input("\nPressione qualquer tecla para continuar...")
+            aguarda_usuario()
             return
             
     print("Transação não encontrada")
-    input("\nPressione qualquer tecla para continuar...")
+    aguarda_usuario()
     return 
 
 
@@ -242,6 +254,8 @@ def cadastrar_transacao():
         categoria = input("Digite a categoria da transação: ")
     except ValueError:
         print("\nValor inválido. Tente novamente.")
+        aguarda_usuario()
+        return
     nova_transacao = {
         "UUID": str(uuid.uuid4()),
         "valor": round(valor, 2),
@@ -251,7 +265,7 @@ def cadastrar_transacao():
     print()
     salvar_json(bd, "./data", "transactions.json")
     print("Transação cadastrada com sucesso.")
-    input("\nPressione qualquer tecla para continuar...")
+    aguarda_usuario()
 
 def editar_transacao_por_ID():
     """
@@ -266,7 +280,7 @@ def editar_transacao_por_ID():
             novo_valor = float(input(f"Digite o novo valor (atual: R${transacao['valor']}): R$"))
         except ValueError:
             print("\nValor inválido. Tente novamente.")
-            input("\nPressione qualquer tecla para continuar...")
+            aguarda_usuario()
             return
         nova_categoria = input(f"Digite a nova categoria (atual: {transacao['categoria']}): ")
         
@@ -277,7 +291,7 @@ def editar_transacao_por_ID():
         print("Transação editada com sucesso.")
     else:
         print("Transação não encontrada.")
-        input("\nPressione qualquer tecla para continuar...")
+        aguarda_usuario()
 
 def excluir_transacao():
     """
@@ -291,9 +305,11 @@ def excluir_transacao():
         bd.remove(transacao)
         salvar_json(bd, "./data", "transactions.json")
         print("Transação excluída com sucesso.")
+        aguarda_usuario()
     else:
         print("Transação não encontrada.")
-        input("\nPressione qualquer tecla para continuar...")
+
+        aguarda_usuario()
 
 if __name__ == "__main__":
     

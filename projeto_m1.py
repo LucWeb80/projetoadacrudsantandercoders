@@ -74,7 +74,7 @@ def limpar_console():
     os.system('cls')
 
 def aguarda_usuario():
-    input("\nPressione qualquer tecla para continuar...")
+    input("\nPressione Enter para continuar...")
 
 # -----------------------
 # PROGRAM functions 
